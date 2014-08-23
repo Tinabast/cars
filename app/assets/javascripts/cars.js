@@ -7,6 +7,7 @@
       type: "title",
       name: "Overview",
       content: [
+        "",
         "Body Styles",
         "Trim lines",
         "Base MSRP Price Range",
@@ -176,7 +177,6 @@
         "Roadside aid"]
     }
   ];
-  console.log(contentStructure);
 
   function log() {
     if (OPTIONS.DEBUG) {
@@ -282,53 +282,65 @@
   }
 
   $(function() {
-    (function(){
-      var compareHtml = "",
-        l = contentStructure.length;
+    $("#compare").html(_.template($('#content-table_template').html(), {tableRows: contentStructure}));
+    $('input[name="state"]').on('change', function(){
+      var makes;
 
-      for (var i = 0; i < l; i += 1) {
-        var categoryName = contentStructure[i].name,
-          categoryItems = contentStructure[i].content,
-          itemLength = categoryItems.length,
-          categoryHtml = "";
+      $('#make').html('');
+      $('#model').html('');
 
-        for (var n = 0; n < itemLength; n += 1) {
-          var item = categoryItems[n];
-
-          if (typeof(item) == "object") {
-            var subCategoryName = item.name,
-              subCategoryItems = item.content,
-              subItemsLength = subCategoryItems.length,
-              subCategoryHtml = "";
-
-            for (var j = 0; j < subItemsLength; j += 1) {
-              subCategoryHtml += "<div class='category_sub_item'>" + subCategoryItems[j] + "</div>";
-            }
-
-            categoryHtml += "<div class='category category_sub'><div class='category_sub_title'>" + subCategoryName + "</div><div class='category_sub_list'>" + subCategoryHtml + "</div></div>";
-
-          } else {
-            categoryHtml += "<div class='category_main_item'>" + item + "</div>";
-          }
-        }
-        compareHtml += "<div class='category category_main'><div class='category_main_title'>" + categoryName + "</div><div class='category_main_list'>" + categoryHtml + "</div></div>";
-        console.log(compareHtml);
+      if($(this).val() === "new") {
+        makes = MakeModelComparePulldowns.thePulldownNewData;
+      } else {
+        makes = MakeModelComparePulldowns.thePulldownUsedData;
       }
+      $("#make").html(_.template($('#make-select_template').html(), {makes: makes}));
+    });
+    $('#make').on('change', function(){
+      var state = $('input[name="state"]').val(),
+        make = $('#make').val(),
+        makes,
+        makeContent;
 
-      $('#compare').html("<div>" + compareHtml + "</div>")
-    })();
+      if(state === "new") {
+        makes = MakeModelComparePulldowns.thePulldownNewData;
+      } else {
+        makes = MakeModelComparePulldowns.thePulldownUsedData;
+      }
+      makeContent = _.find(makes, function(el){
+        return el.makeName == make;
+      });
+      if (makeContent) {
+        $("#model").html(_.template($('#model-select_template').html(), {models: makeContent.models}));
+      } else {
+        $("#model").html(_.template($('#model-select_template').html(), {models: []}));        
+      }
+    });
+    
     $("#load-cars").on("submit", function(){
       ajaxRequest = {
-        url: '/cars/new/porsche/cayenne',
+        url: '/cars/' + $('#model').val(),
         dataType: 'script',// Use default: Intelligent Guess type select, because text/html header is returned for no results;
         type: 'GET'
         //data: 'cat=mobile&q=' + encodeURIComponent(searchInput) + requestParams
       };
       $.ajax(ajaxRequest).done(function(){
         var l = __xxx.length,
+          $rows = $('.content-row'),
+          content = [],
           html = "";
+        // for (var i = 0; i < l; i+=1) {
+        //   var text = $(__xxx[i]).text();
+        //   if (text && text != " ") {
+        //     console.log(text);
+        //     content.push(text);
+        //   }
+        // }
         for (var i = 0; i < l; i+=1) {
-          html += __xxx[i];
+          if ($rows[i]) {
+            console.log(__xxx[i]);
+            $($rows[i]).append(__xxx[i]);
+          }          
         }
         $('body').append('<table><tr>' + html + '</tr></table>');
       });
