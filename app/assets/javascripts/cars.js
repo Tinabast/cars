@@ -5,9 +5,9 @@
     contentStructure = [
     {
       type: "title",
-      name: "Overview",
+      name: "",
       content: [
-        "",
+        "Overview",
         "Body Styles",
         "Trim lines",
         "Base MSRP Price Range",
@@ -195,8 +195,7 @@
     //if no object - initiates router
     var AppRouter = Backbone.Router.extend({
       routes: {
-        ":cat/:q/:page": "mainRoute",
-        ":cat": "catRoute",
+        ":cars": "mainRoute",
         "*actions": "defaultRoute" // Backbone will try match the route above first
       }
     }),
@@ -207,18 +206,19 @@
       key,
       params = {},
       query,
-      cat,
+      car,
       q,
       page;
 
     if (obj) {
-      cat = obj.cat;
-      q = obj.q || '';
-      page = obj.page;
-      if (!obj.q) {
-        query = cat;
-      } else {
-        query = cat + '/' + q + '/' + page;
+      if (obj.action === "add") {
+        query = paramString || "";
+        car = obj.car.replace(/\//g, "&");
+        if (query) {
+          query += ",";
+        }
+        query += car;
+      } else if (obj.action === "remove") {
       }
       app_router.navigate(query, {
         trigger: true,
@@ -229,56 +229,54 @@
         log('there is no routes for such url string!');
       });
 
-      app_router.on('route:catRoute', function(cat) {
+      app_router.on('route:mainRoute', function(cars) {
         // Note the variable in the route definition being passed in here
-        $('.tabs_switch').removeClass('active');
-        $('.tabs_switch[href=' + cat + ']').addClass('active');
-        if (cat === "images") {
-          $('body').append('<script id="imagesearch_js" src="js/imagesearch.js"></script>');
-        }
-      });
-      app_router.on('route:mainRoute', function(cat, q, page) {
-        // Note the variable in the route definition being passed in here
-        $('.tabs_switch').removeClass('active');
-        $('.tabs_switch[href=' + cat + ']').addClass('active');
-        if (cat === "images") {
-          if (!$('#imagesearch_js').length) {
-            $('body').append('<script id="imagesearch_js" src="js/imagesearch.js" data-q="' + q + '" data-active="' + page + '"></script>');            
-          } else {
-            imagesearch.search(q, page);
-          }
-        } else {
-          $('#q').val(q);
-          if (page == 1) {
-            $('#search_form').submit();
-          } else {
-            if (cat === 'xfinitytv') {
-              params = '&start=' + page;
-              getData(renderResults, params);
-            } else if (cat === 'web' || cat === 'support') {
-              offset = (parseInt(page) - 1) * 10;
-              params = '&offset=' + offset;
-              getData(renderResults, params);        
+        var carsArr = cars.split(","),
+          l = carsArr.length,
+          i = 0;
+
+        function recursiveLoad(i) {        
+          renderCar(carsArr[i].replace(/\&/g, "/"), function() {
+            i += 1;
+            if (i < l) {
+              recursiveLoad(i);
             }
-          }
-        }
+          } );
+        };
+        recursiveLoad(i);
       });
       // Start Backbone history a necessary step for bookmarkable URL's
       Backbone.history.start();
     }
   }
 
-  function renderResults(data) {
-  }
-
-  function getData(callback, requestParams) {
+  function renderCar(url, callback) {
     ajaxRequest = {
-      url: '/proxy_support/',
-      //dataType: 'json',// Use default: Intelligent Guess type select, because text/html header is returned for no results;
-      type: 'GET',
-      data: 'cat=mobile&q=' + encodeURIComponent(searchInput) + requestParams
+      url: url,
+      dataType: 'script',// Use default: Intelligent Guess type select, because text/html header is returned for no results;
+      type: 'GET'
+      //data: 'cat=mobile&q=' + encodeURIComponent(searchInput) + requestParams
     };
-    $.ajax(ajaxRequest).done(callback);
+    $.ajax(ajaxRequest).done(function(){
+      var l = __xxx.length,
+        $rows = $('.content-row'),
+        content = [],
+        html = "";
+      // for (var i = 0; i < l; i+=1) {
+      //   var text = $(__xxx[i]).text();
+      //   if (text && text != " ") {
+      //     console.log(text);
+      //     content.push(text);
+      //   }
+      // }
+      for (var i = 0; i < l; i+=1) {
+        if ($rows[i]) {
+          $($rows[i]).append(__xxx[i]);
+        }          
+      }
+      $('body').append('<table><tr>' + html + '</tr></table>');
+      callback(ajaxRequest);
+    });
   }
 
   $(function() {
@@ -297,11 +295,11 @@
       $("#make").html(_.template($('#make-select_template').html(), {makes: makes}));
     });
     $('#make').on('change', function(){
-      var state = $('input[name="state"]').val(),
+      var state = $('input[name="state"]:checked').val(),
         make = $('#make').val(),
         makes,
         makeContent;
-
+      console.log(state); 
       if(state === "new") {
         makes = MakeModelComparePulldowns.thePulldownNewData;
       } else {
@@ -318,31 +316,12 @@
     });
     
     $("#load-cars").on("submit", function(){
-      ajaxRequest = {
-        url: '/cars/' + $('#model').val(),
-        dataType: 'script',// Use default: Intelligent Guess type select, because text/html header is returned for no results;
-        type: 'GET'
-        //data: 'cat=mobile&q=' + encodeURIComponent(searchInput) + requestParams
-      };
-      $.ajax(ajaxRequest).done(function(){
-        var l = __xxx.length,
-          $rows = $('.content-row'),
-          content = [],
-          html = "";
-        // for (var i = 0; i < l; i+=1) {
-        //   var text = $(__xxx[i]).text();
-        //   if (text && text != " ") {
-        //     console.log(text);
-        //     content.push(text);
-        //   }
-        // }
-        for (var i = 0; i < l; i+=1) {
-          if ($rows[i]) {
-            console.log(__xxx[i]);
-            $($rows[i]).append(__xxx[i]);
-          }          
-        }
-        $('body').append('<table><tr>' + html + '</tr></table>');
+      url = "/cars/" + $('#model').val();
+      renderCar(url, function(){
+        startRouting({
+          action: "add",
+          car: ajaxRequest.url
+        });
       });
       return false;
     });

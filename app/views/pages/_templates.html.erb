@@ -1,22 +1,22 @@
 <script type="template/javascript" id="content-table_template">
-  <table>
+  <table class="compare-table">
     <%% _.each(tableRows, function(category){ %>
       <tr class="content-title content-row">
-        <td><%%= category.name %></td>
+        <td class="row-title"><%%= category.name %></td>
       </tr>
       <%% _.each(category.content, function(row){ %>
         <%% if (typeof(row) == "object") { %>
           <tr class="content-subtitle content-row">
-            <td><%%= row.name %></td>
+            <td class="row-title"><%%= row.name %></td>
           </tr>
           <%% _.each(row.content, function(row){ %>
             <tr class="content-item content-row">
-              <td><%%= row %></td>
+              <td class="row-title"><%%= row %></td>
             </tr>
           <%% }); %>
         <%% } else { %>
           <tr class="content-item content-row">
-            <td><%%= row %></td>
+            <td class="row-title"><%%= row %></td>
           </tr>
         <%% } %>
       <%% }); %>
