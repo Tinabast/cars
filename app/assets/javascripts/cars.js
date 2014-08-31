@@ -211,14 +211,20 @@
       page;
 
     if (obj) {
+      query = paramString || "";
       if (obj.action === "add") {
-        query = paramString || "";
         car = obj.car.replace(/\//g, "&");
         if (query) {
           query += ",";
         }
         query += car;
       } else if (obj.action === "remove") {
+        car = "&cars&" + obj.car.replace(/\//g, "&");
+        console.log(car);
+        // if (query.indexOf(car) != 0) {
+          query = query.replace(car, "");
+        console.log(query);
+        // }
       }
       app_router.navigate(query, {
         trigger: true,
@@ -272,34 +278,45 @@
       for (var i = 0; i < l; i+=1) {
         if ($rows[i]) {
           $($rows[i]).append(__xxx[i]);
+          var img = $($rows[i]).find("img"),
+            alt;
+          //.replace('<img src="/cro/resources/content/images/blobs/blob_3.gif" width="11" height="11" alt="Good">', 'Good');
+          img.each(function(){
+            alt = $(this).attr('alt');
+            $(this)[0].outerHTML = "<span class='quality' data-quality='" + alt + "'>" + alt + "</span>";
+          });
         }          
       }
-      $('body').append('<table><tr>' + html + '</tr></table>');
       callback(ajaxRequest);
     });
+  }
+
+  function loadMakes() {
+    var makes,
+      state = $('input[name="state"]').val();
+
+    $('#make').html('');
+    $('#model').html('');
+
+    if(state === "new") {
+      makes = MakeModelComparePulldowns.thePulldownNewData;
+    } else {
+      makes = MakeModelComparePulldowns.thePulldownUsedData;
+    }
+    $("#make").html(_.template($('#make-select_template').html(), {makes: makes}));
+
   }
 
   $(function() {
     $("#compare").html(_.template($('#content-table_template').html(), {tableRows: contentStructure}));
     $('input[name="state"]').on('change', function(){
-      var makes;
-
-      $('#make').html('');
-      $('#model').html('');
-
-      if($(this).val() === "new") {
-        makes = MakeModelComparePulldowns.thePulldownNewData;
-      } else {
-        makes = MakeModelComparePulldowns.thePulldownUsedData;
-      }
-      $("#make").html(_.template($('#make-select_template').html(), {makes: makes}));
+      loadMakes();
     });
     $('#make').on('change', function(){
       var state = $('input[name="state"]:checked').val(),
         make = $('#make').val(),
         makes,
         makeContent;
-      console.log(state); 
       if(state === "new") {
         makes = MakeModelComparePulldowns.thePulldownNewData;
       } else {
@@ -325,6 +342,22 @@
       });
       return false;
     });
+
+    $('#compare').on('click', '.model-bar', function(e){
+      var $td = $(this).parents('td'),
+        car = $td.first().attr('id').slice(0, -2);
+
+      $('[id^="' + car + '"]').remove();
+
+      startRouting({
+        action: "remove",
+        car: car
+      });
+
+
+
+    });
+    loadMakes();
     startRouting();
   });
 })(window);
