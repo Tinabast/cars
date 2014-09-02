@@ -5,9 +5,14 @@
     contentStructure = [
     {
       type: "title",
-      name: "",
+      name: "<button disabled='disabled' class='btn red disabled' id='clear-button'>clear all</button>",
       content: [
-        "Overview",
+      ]
+    },
+    {
+      type: "title",
+      name: "Overview",
+      content: [
         "Body Styles",
         "Trim lines",
         "Base MSRP Price Range",
@@ -220,11 +225,12 @@
         query += car;
       } else if (obj.action === "remove") {
         car = "&cars&" + obj.car.replace(/\//g, "&");
-        console.log(car);
-        // if (query.indexOf(car) != 0) {
-          query = query.replace(car, "");
-        console.log(query);
-        // }
+
+        query = query.replace("," + car, "");
+        query = query.replace(car + ",", "");
+        query = query.replace(car, "");          
+      } else if (obj.action === "removeAll") {
+        query = "";
       }
       app_router.navigate(query, {
         trigger: true,
@@ -283,10 +289,13 @@
           //.replace('<img src="/cro/resources/content/images/blobs/blob_3.gif" width="11" height="11" alt="Good">', 'Good');
           img.each(function(){
             alt = $(this).attr('alt');
-            $(this)[0].outerHTML = "<span class='quality' data-quality='" + alt + "'>" + alt + "</span>";
+            if (alt != "suv") {
+              $(this)[0].outerHTML = "<span class='quality' data-quality='" + alt + "'>" + alt + "</span>";
+            }
           });
         }          
       }
+      $('#clear-button').prop("disabled", false).removeClass("disabled");
       callback(ajaxRequest);
     });
   }
@@ -354,8 +363,21 @@
         car: car
       });
 
-
-
+    });
+    $('#compare').on('click', '.content-title', function(e){
+      var cat = $(this).data("cat");
+      $(".cat-" + cat).toggleClass("item-hidden");
+    });
+    $('#compare').on('click', '.content-subtitle', function(e){
+      var cat = $(this).data("cat");
+      var subcat = $(this).data("subcat");
+      $(".subcat-" + cat + "-" + subcat).toggleClass("sub-item-hidden");
+    });
+    $('#compare').on('click', '#clear-button', function(e){
+      $("#compare").html(_.template($('#content-table_template').html(), {tableRows: contentStructure}));
+      startRouting({
+        action: "removeAll"
+      });
     });
     loadMakes();
     startRouting();
