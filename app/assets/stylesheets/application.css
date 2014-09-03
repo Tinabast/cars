@@ -40,26 +40,23 @@ button {
   color: red;
 }
 
-.table td {
-  width: 100px;
-  height: 30px;
-  border: 1px solid black;
-}
-.table {
-  border-collapse: collapse
-}
 
 .compare-table {
   border-collapse: collapse;
+  margin-left: 20px;
+  background: #fff;
 }
 .compare-table td {
   border: 1px solid #A5A5A5;
+  padding: 3px;
+  box-sizing: border-box;
 }
 .row-title {
-  width: 200px;
+  width: 240px;
+  box-sizing: border-box;
 }
 .data-cell {
-  width: 150px;
+  width: 180px;
 }
 .rec {
   display: none;
@@ -69,7 +66,7 @@ button {
 }
 .model-bar {
   display: block;
-  width: 146px;
+  width: 172px;
   background: #ccc;
   cursor: pointer;
 }
@@ -156,13 +153,29 @@ button {
 
 }
 
-.content-title td:first-child:before {
+.content-title td:first-child {
+  padding-left: 15px;
+}
+
+.content-title td:first-child:before,
+.content-subtitle td:first-child:before {
   content: "";
+  position: relative;
   border: 5px solid transparent;
-  border-left: 5px solid #000;
+  border-bottom: 5px solid #000;
+  top: -14px;
+  left: -5px;
+  z-index: 0;
+}
+.content-title.item-hidden td:first-child:before,
+.content-subtitle.sub-item-hidden td:first-child:before {
+  border: 5px solid transparent;
+  border-top: 5px solid #000;
+  top: 14px;
 }
 .content-title td {
   border: none;
+  border-left: 1px solid transparent;
 }
 
 
@@ -170,11 +183,37 @@ button {
   border: 1px solid #a5a5a5;
 }
 .content-title:first-child {
-  background: none;
+  background: #fff;
+}
+
+.header-fixed .content-title:first-child {
+  position: fixed;
+  top: 0;
+  left: 27px;
+  z-index: 1;
+}
+
+.header-fixed .content-title:first-child td {
+  width: 180px !important;
+}
+
+.header-fixed .content-title:first-child td.row-title {
+  width: 240px !important;
+}
+
+.content-title:first-child td:first-child:before, 
+.content-title.item-hidden:first-child td:first-child:before {
+  border: none;
+}
+.header-fixed .content-title.cat-1 td {
+  padding-top: 190px;
+}
+
+.header-fixed .content-title {
 }
 
 .content-subtitle td {
-  padding-left: 15px;
+  padding-left: 25px;
 }
 
 .content-item:nth-child(2n) {
@@ -193,4 +232,4 @@ button {
 
   border: 1px solid #aaa;
 
-  }
+}

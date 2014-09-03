@@ -379,6 +379,16 @@
         action: "removeAll"
       });
     });
+    $(window).on('scroll', function(){
+      var top = $(".compare-table").first().position().top;
+      var scrollTop = $(this).scrollTop();
+      if (scrollTop >= top) {
+        $(".compare-table").addClass('header-fixed');
+      } else {
+        $(".compare-table").removeClass('header-fixed');        
+      }
+
+    });
     loadMakes();
     startRouting();
   });
