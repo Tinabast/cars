@@ -1,0 +1,183 @@
+ @import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400italic,700italic,400,700);
+
+body {
+  font-family: "Roboto Condensed", Helvetica, Sans-Serif;
+  font-size: 14px;
+}
+
+#load-cars {
+  font-family:  "Roboto Condensed", Helvetica, Sans-Serif;
+}
+
+.content-title {
+  color: #464646;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.content-subtitle {
+  color: #464646;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.compare-table {
+  border-collapse: collapse;
+  margin-left: 0px;
+  background: #fff;
+}
+.compare-table td {
+  border: 1px solid #A5A5A5;
+  padding: 3px;
+  box-sizing: border-box;
+}
+.row-title {
+  width: 240px;
+  box-sizing: border-box;
+}
+.data-cell {
+  width: 180px;
+}
+.rec {
+  display: none;
+}
+.model-bar a {
+  display: none;
+}
+.model-bar {
+  display: block;
+  width: 172px;
+  background: #ccc;
+  cursor: pointer;
+}
+.model-bar:hover {
+  background: #ddd;  
+}
+.model-bar:before {
+  content: "remove";
+  font-size: 14px;
+}
+
+.model-bar:after {
+  float: left;
+  content: "\2716";
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+#compare {
+  margin-top: 3px;
+}
+.model-name {
+  font-size: 17px;
+}
+.model-item {
+  font-size: 14px;
+}
+
+.content-item.item-hidden,
+.content-subtitle.item-hidden
+ {
+  display: none;
+}
+
+.sub-item.sub-item-hidden {
+  display: none;
+}
+
+.content-title, .content-subtitle {
+  font-family: "Roboto Condensed", Helvetica, Sans-Serif;
+  cursor: pointer;
+}
+
+.content-title {
+  border-right: 1px solid #a5a5a5;
+  background: #99ccff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #99ccff 0%, #59acff 49%, #a6c8ea 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#99ccff), color-stop(49%,#59acff), color-stop(100%,#a6c8ea)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #99ccff 0%,#59acff 49%,#a6c8ea 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #99ccff 0%,#59acff 49%,#a6c8ea 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #99ccff 0%,#59acff 49%,#a6c8ea 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #99ccff 0%,#59acff 49%,#a6c8ea 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99ccff', endColorstr='#a6c8ea',GradientType=0 ); /* IE6-9 */
+}
+
+.content-subtitle {
+  background: #bed8cc; /* Old browsers */
+  background: -moz-linear-gradient(top,  #bed8cc 0%, #c1ddc9 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bed8cc), color-stop(100%,#c1ddc9)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #bed8cc 0%,#c1ddc9 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #bed8cc 0%,#c1ddc9 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #bed8cc 0%,#c1ddc9 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #bed8cc 0%,#c1ddc9 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bed8cc', endColorstr='#c1ddc9',GradientType=0 ); /* IE6-9 */
+
+}
+
+.content-title td:first-child {
+  padding-left: 15px;
+}
+
+.content-title td:first-child:before,
+.content-subtitle td:first-child:before {
+  content: "";
+  position: relative;
+  border: 5px solid transparent;
+  border-bottom: 5px solid #000;
+  top: -14px;
+  left: -5px;
+  z-index: 0;
+}
+.content-title.item-hidden td:first-child:before,
+.content-subtitle.sub-item-hidden td:first-child:before {
+  border: 5px solid transparent;
+  border-top: 5px solid #000;
+  top: 14px;
+}
+.content-title td {
+  border: none;
+  border-left: 1px solid transparent;
+}
+
+
+.content-title:first-child td {
+  border: 1px solid #a5a5a5;
+}
+.content-title:first-child {
+  background: #fff;
+}
+
+.header-fixed .content-title:first-child {
+  position: fixed;
+  top: 0;
+  left: 27px;
+  z-index: 1;
+}
+
+.header-fixed .content-title:first-child td {
+  width: 180px !important;
+}
+
+.header-fixed .content-title:first-child td.row-title {
+  width: 240px !important;
+}
+
+.content-title:first-child td:first-child:before, 
+.content-title.item-hidden:first-child td:first-child:before {
+  border: none;
+}
+.header-fixed .content-title.cat-1 td {
+  padding-top: 190px;
+}
+
+.header-fixed .content-title {
+}
+
+.content-subtitle td {
+  padding-left: 25px;
+}
+
+.content-item:nth-child(2n) {
+  background: #ddd;
+}

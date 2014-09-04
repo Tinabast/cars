@@ -5,7 +5,7 @@
     contentStructure = [
     {
       type: "title",
-      name: "<button disabled='disabled' class='btn red disabled' id='clear-button'>clear all</button>",
+      name: "<button disabled='disabled' class='btn btn-lg btn-danger' id='clear-button'>clear all</button>",
       content: [
       ]
     },

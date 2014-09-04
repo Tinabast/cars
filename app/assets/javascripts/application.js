@@ -12,7 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap.min
 //= require turbolinks
 //= require underscore-min
 //= require backbone-min
+//= require jquery.dragtable
 //= require_tree .
