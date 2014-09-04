@@ -148,7 +148,7 @@ body {
   background: #fff;
 }
 
-.header-fixed .content-title:first-child {
+/*.header-fixed .content-title:first-child {
   position: fixed;
   top: 0;
   left: 27px;
@@ -163,17 +163,17 @@ body {
   width: 240px !important;
 }
 
-.content-title:first-child td:first-child:before, 
-.content-title.item-hidden:first-child td:first-child:before {
-  border: none;
-}
 .header-fixed .content-title.cat-1 td {
   padding-top: 190px;
 }
 
 .header-fixed .content-title {
 }
-
+*/
+.content-title:first-child td:first-child:before, 
+.content-title.item-hidden:first-child td:first-child:before {
+  border: none;
+}
 .content-subtitle td {
   padding-left: 25px;
 }
