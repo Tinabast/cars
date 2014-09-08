@@ -3,12 +3,12 @@
     DEBUG: true
   },
     contentStructure = [
-    {
-      type: "title",
-      name: "<button disabled='disabled' class='btn btn-lg btn-danger' id='clear-button'>clear all</button>",
-      content: [
-      ]
-    },
+    // {
+    //   type: "title",
+    //   name: "<button disabled='disabled' class='btn btn-lg btn-danger' id='clear-button'>clear all</button>",
+    //   content: [
+    //   ]
+    // },
     {
       type: "title",
       name: "Overview",
@@ -200,7 +200,7 @@
     //if no object - initiates router
     var AppRouter = Backbone.Router.extend({
       routes: {
-        ":cars": "mainRoute",
+        ":cars/:cat/:subcat": "mainRoute",
         "*actions": "defaultRoute" // Backbone will try match the route above first
       }
     }),
@@ -241,7 +241,7 @@
         log('there is no routes for such url string!');
       });
 
-      app_router.on('route:mainRoute', function(cars) {
+      app_router.on('route:mainRoute', function(cars,cat,subcat) {
         // Note the variable in the route definition being passed in here
         var carsArr = cars.split(","),
           l = carsArr.length,
@@ -283,17 +283,23 @@
       // }
       for (var i = 0; i < l; i+=1) {
         if ($rows[i]) {
-          $($rows[i]).append(__xxx[i]);
-          var img = $($rows[i]).find("img"),
-            alt;
-          //.replace('<img src="/cro/resources/content/images/blobs/blob_3.gif" width="11" height="11" alt="Good">', 'Good');
-          img.each(function(){
-            alt = $(this).attr('alt');
-            if (alt != "suv") {
+          if (i == 0) {
+            var $oldHeader = $(__xxx[i]);
+            var modelName = $oldHeader.find('.model-name').html();
+            var modelIcon = $oldHeader.find('img[alt="suv"]')[0].outerHTML;
+            $($rows[i]).append('<th>' + modelIcon + '<p>' + modelName + '</p>' + '</th>');
+
+          } else {
+            $($rows[i]).append(__xxx[i]);
+            var img = $($rows[i]).find("img"),
+              alt;
+            //.replace('<img src="/cro/resources/content/images/blobs/blob_3.gif" width="11" height="11" alt="Good">', 'Good');
+            img.each(function(){
+              alt = $(this).attr('alt');
               $(this)[0].outerHTML = "<span class='quality' data-quality='" + alt + "'>" + alt + "</span>";
-            }
-          });
-        }          
+            });
+          } 
+        }       
       }
       $('#clear-button').prop("disabled", false).removeClass("disabled");
       callback(ajaxRequest);
@@ -389,6 +395,7 @@
       }
 
     });
+    $('.compare-table').dragtable();
     loadMakes();
     startRouting();
   });

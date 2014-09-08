@@ -1,26 +1,35 @@
 <script type="template/javascript" id="content-table_template">
   <table class="compare-table">
-    <%% _.each(tableRows, function(category, i){ %>
-      <tr class="content-title content-row cat-<%%= i %>" data-cat="<%%= i %>">
-        <td class="row-title"><%%= category.name %></td>
+    <thead>
+      <tr class="content-row">
+        <th>
+          <button disabled='disabled' class='btn btn-lg btn-danger' id='clear-button'>clear all</button>
+        </th>
       </tr>
-      <%% _.each(category.content, function(row, n){ %>
-        <%% if (typeof(row) == "object") { %>
-          <tr class="content-subtitle content-row cat-<%%= i %> subcat-<%%= i %>-<%%= n %>" data-cat="<%%= i %>" data-subcat="<%%= n %>">
-            <td class="row-title"><%%= row.name %></td>
-          </tr>
-          <%% _.each(row.content, function(row){ %>
-            <tr class="content-item content-row cat-<%%= i %> sub-item subcat-<%%= i %>-<%%= n %>">
+    </thead>
+    <tbody>
+      <%% _.each(tableRows, function(category, i){ %>
+        <tr class="content-title content-row cat-<%%= i %>" data-cat="<%%= i %>">
+          <td class="row-title"><%%= category.name %></td>
+        </tr>
+        <%% _.each(category.content, function(row, n){ %>
+          <%% if (typeof(row) == "object") { %>
+            <tr class="content-subtitle content-row cat-<%%= i %> subcat-<%%= i %>-<%%= n %>" data-cat="<%%= i %>" data-subcat="<%%= n %>">
+              <td class="row-title"><%%= row.name %></td>
+            </tr>
+            <%% _.each(row.content, function(row){ %>
+              <tr class="content-item content-row cat-<%%= i %> sub-item subcat-<%%= i %>-<%%= n %>">
+                <td class="row-title"><%%= row %></td>
+              </tr>
+            <%% }); %>
+          <%% } else { %>
+            <tr class="content-item content-row cat-<%%= i %>">
               <td class="row-title"><%%= row %></td>
             </tr>
-          <%% }); %>
-        <%% } else { %>
-          <tr class="content-item content-row cat-<%%= i %>">
-            <td class="row-title"><%%= row %></td>
-          </tr>
-        <%% } %>
+          <%% } %>
+        <%% }); %>
       <%% }); %>
-    <%% }); %>
+    </tbody>
   </table>
 </script>
 <script type="template/javascript" id="make-select_template">

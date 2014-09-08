@@ -144,10 +144,10 @@ body {
 .content-title:first-child td {
   border: 1px solid #a5a5a5;
 }
-.content-title:first-child {
+/*.content-title:first-child {
   background: #fff;
 }
-
+*/
 /*.header-fixed .content-title:first-child {
   position: fixed;
   top: 0;
@@ -170,10 +170,10 @@ body {
 .header-fixed .content-title {
 }
 */
-.content-title:first-child td:first-child:before, 
+/*.content-title:first-child td:first-child:before, 
 .content-title.item-hidden:first-child td:first-child:before {
   border: none;
-}
+}*/
 .content-subtitle td {
   padding-left: 25px;
 }
