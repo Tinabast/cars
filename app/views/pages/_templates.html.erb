@@ -2,8 +2,31 @@
   <table class="compare-table">
     <thead>
       <tr class="content-row">
-        <th>
-          <button disabled='disabled' class='btn btn-lg btn-danger' id='clear-button'>clear all</button>
+        <th class="dragtable-drag-boundary dragtable-col-disabled">
+          <form id="load-cars" class="header-content">
+            <label> 
+              New
+              <input type="radio" name="state" value="new" checked="checked">
+            </label>
+            <label> 
+              Used
+              <input type="radio" name="state" value="used">
+            </label>
+            <label> 
+              Make
+              <select id="make"></select>
+            </label>
+            <label>
+              Model
+              <select id="model"></select>
+            </label>
+            <button disabled='disabled' class='btn btn-lg btn-danger' id='clear-button'>
+              clear all
+            <button class="btn btn-lg btn-success">
+              add
+            </button>
+            </button>
+          </form>
         </th>
       </tr>
     </thead>

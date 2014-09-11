@@ -1,17 +1,3 @@
-%form#load-cars
-  %label 
-    New
-    %input{type: "radio", name: "state", value: "new", checked: "checked"}
-  %label 
-    Used
-    %input{type: "radio", name: "state", value: "used"}
-  %label 
-    Make
-    %select#make
-  %label 
-    Model
-    %select#model
-  %button.btn.btn-lg.btn-success add
 #compare
 
 = render partial: "templates"

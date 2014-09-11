@@ -54,6 +54,8 @@
             boundary: 'dragtable-drag-boundary',
             //classnames that get applied to the real td, th
             placeholder: 'dragtable-col-placeholder',
+            //if column has this class, it is undragable
+            disabled: 'dragtable-col-disabled',
             
             /*
                 the drag display will be appended to this element, 
@@ -102,6 +104,10 @@
                 
                 var $handle = $(this),
                     elementOffsetTop = self.element.position().top;
+
+                if( $handle.hasClass( o.disabled ) ){
+                    return;
+                }
 
                 //make sure we are working with a th instead of a handle
                 if( $handle.hasClass( o.handle ) ){

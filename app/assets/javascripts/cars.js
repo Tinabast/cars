@@ -181,7 +181,12 @@
         "Rust through",
         "Roadside aid"]
     }
-  ];
+  ],
+  CACHE = {
+    cars: [],
+    cats: [],
+    subcats: []
+  };
 
   function log() {
     if (OPTIONS.DEBUG) {
@@ -208,30 +213,71 @@
       url = $(location).attr('href'),
       paramString = url.split('#')[1],
       paramArray,
+      queryValues,
+      queryCars = "",
+      queryCats = "",
+      querySubcats = "",
       key,
       params = {},
-      query,
+      query = "",
       car,
       q,
-      page;
+      page,
+      catArr,
+      subcatArr,
+      subcatIndexes;
 
     if (obj) {
-      query = paramString || "";
-      if (obj.action === "add") {
-        car = obj.car.replace(/\//g, "&");
-        if (query) {
-          query += ",";
-        }
-        query += car;
-      } else if (obj.action === "remove") {
-        car = "&cars&" + obj.car.replace(/\//g, "&");
+      console.log(obj);
+      console.log(CACHE);
 
-        query = query.replace("," + car, "");
-        query = query.replace(car + ",", "");
-        query = query.replace(car, "");          
-      } else if (obj.action === "removeAll") {
-        query = "";
+      if (obj.params === "cars") {
+        car = obj.car.replace(/\//g, "&");
+        if (obj.action === "add") {
+          CACHE.cars.push(car);
+        } else if (obj.action === "remove") {
+          CACHE.cars = _.filter(CACHE.cars, function(c){
+            return c != car;
+          });
+        } else if (obj.action === "removeAll") {
+          CACHE.cars = [];
+        }
+      } else if (obj.params === "cats") {
+        if (obj.action === "add") {
+          CACHE.cats.push(obj.cat);
+        } else if (obj.action === "remove") {
+          CACHE.cats = _.filter(CACHE.cats, function(c){
+            return c != obj.cat;
+          });
+        }
+      } else if (obj.params === "subcats") {
+        if (obj.action === "add") {
+          CACHE.subcats.push(obj.subcat);
+        } else if (obj.action === "remove") {
+          CACHE.subcats = _.filter(CACHE.subcats, function(c){
+            return c != obj.subcat;
+          });
+        }
       }
+
+        //Encode URL string (query)
+      if (CACHE.cars.length) {
+        query += CACHE.cars.join(",") + "/";
+      } else {
+        query += "none/";
+      }
+      console.log(query);
+      if (CACHE.cats.length) {
+        query += CACHE.cats.join(",") + "/";
+      } else {
+        query += "none/";
+      }
+      if (CACHE.subcats.length) {
+        query += CACHE.subcats.join(",");
+      } else {
+        query += "none";
+      }
+      console.log(query);
       app_router.navigate(query, {
         trigger: true,
         replace: true
@@ -239,23 +285,56 @@
     } else {
       app_router.on('route:defaultRoute', function() {
         log('there is no routes for such url string!');
+        app_router.navigate("none/none/none", {
+          trigger: true,
+          replace: true
+        });
       });
 
       app_router.on('route:mainRoute', function(cars,cat,subcat) {
         // Note the variable in the route definition being passed in here
-        var carsArr = cars.split(","),
-          l = carsArr.length,
-          i = 0;
 
-        function recursiveLoad(i) {        
-          renderCar(carsArr[i].replace(/\&/g, "/"), function() {
-            i += 1;
-            if (i < l) {
-              recursiveLoad(i);
-            }
-          } );
-        };
-        recursiveLoad(i);
+        //Loading hidden categories
+        if (cat !== "none") {
+          catArr = cat.split(",");
+          CACHE.cats = catArr;
+
+          for (var i = 0; i < catArr.length; i += 1) {
+            $(".content-row.cat-" + catArr[i]).addClass("item-hidden");
+          }
+        }
+
+
+        //Loading hidden subcategories
+        if (subcat !== "none") {
+          subcatArr = subcat.split(",");
+          CACHE.subcats = subcatArr;
+
+          for (var i = 0; i < subcatArr.length; i += 1) {
+            subcatIndexes = subcatArr[i].split("-");
+            $(".content-row.subcat-" + subcatIndexes[0] + "-" + subcatIndexes[1]).addClass("sub-item-hidden");
+          }
+        }
+
+        
+        //Loading cars;
+        if (cars !== "none") {
+          var carsArr = cars.split(","),
+            l = carsArr.length,
+            i = 0;
+
+            CACHE.cars = carsArr;
+
+          function recursiveLoad(i) {        
+            renderCar(carsArr[i].replace(/\&/g, "/"), function() {
+              i += 1;
+              if (i < l) {
+                recursiveLoad(i);
+              }
+            });
+          };
+          recursiveLoad(i);
+        }
       });
       // Start Backbone history a necessary step for bookmarkable URL's
       Backbone.history.start();
@@ -287,7 +366,7 @@
             var $oldHeader = $(__xxx[i]);
             var modelName = $oldHeader.find('.model-name').html();
             var modelIcon = $oldHeader.find('img[alt="suv"]')[0].outerHTML;
-            $($rows[i]).append('<th>' + modelIcon + '<p>' + modelName + '</p>' + '</th>');
+            $($rows[i]).append('<th class="car-title"><div class="header-content">' + modelIcon + '<p>' + modelName + '</p>' + '</div>' + '</th>');
 
           } else {
             $($rows[i]).append(__xxx[i]);
@@ -351,6 +430,7 @@
       url = "/cars/" + $('#model').val();
       renderCar(url, function(){
         startRouting({
+          params: "cars",
           action: "add",
           car: ajaxRequest.url
         });
@@ -365,6 +445,7 @@
       $('[id^="' + car + '"]').remove();
 
       startRouting({
+        params: "cars",
         action: "remove",
         car: car
       });
@@ -373,11 +454,37 @@
     $('#compare').on('click', '.content-title', function(e){
       var cat = $(this).data("cat");
       $(".cat-" + cat).toggleClass("item-hidden");
+      if ($(this).hasClass("item-hidden")) {
+        startRouting({
+          params: "cats",
+          cat: cat,
+          action: "add"
+        });
+      } else {
+        startRouting({
+          params: "cats",
+          cat: cat,
+          action: "remove"
+        });        
+      }
     });
     $('#compare').on('click', '.content-subtitle', function(e){
       var cat = $(this).data("cat");
       var subcat = $(this).data("subcat");
       $(".subcat-" + cat + "-" + subcat).toggleClass("sub-item-hidden");
+      if ($(this).hasClass("sub-item-hidden")) {
+        startRouting({
+          params: "subcats",
+          subcat: cat + "-" + subcat,
+          action: "add"
+        });
+      } else {
+        startRouting({
+          params: "subcats",
+          subcat: cat + "-" + subcat,
+          action: "remove"
+        });        
+      }
     });
     $('#compare').on('click', '#clear-button', function(e){
       $("#compare").html(_.template($('#content-table_template').html(), {tableRows: contentStructure}));
@@ -395,8 +502,8 @@
       }
 
     });
-    $('.compare-table').dragtable();
     loadMakes();
     startRouting();
+    $('.compare-table').dragtable();
   });
 })(window);
