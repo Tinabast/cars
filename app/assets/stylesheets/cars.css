@@ -16,25 +16,50 @@ html, body, #compare, .compare-table, .compare-table tbody {
   padding: 0;
   display: block;
 }
+.compare-table {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 
  .compare-table tbody {
-  overflow: auto;
-  border-bottom: 128px solid transparent;
+  overflow-y: auto;
+  overflow-x: visible;
+  border-bottom: 158px solid transparent;
  }
 
 .compare-table td, .compare-table th, .compare-table .header-content {
     width: 250px;
+    min-width: 250px;
     overflow: hidden;
   }
+.compare-table thead {
+  white-space: nowrap;
+}
 .compare-table thead th {
   display: inline-block;
+  vertical-align: top;
+  white-space: normal;
 }
 #compare {
   overflow: auto;
 }
 
+#make, #model {
+  width: 160px;
+}
+
+#make {
+  margin-left: 4px;
+}
+
 #load-cars {
   font-family:  "Roboto Condensed", Helvetica, Sans-Serif;
+}
+
+#load-cars .form-row {
+  margin: 5px;
+  display: block;
+  width: 100%;
 }
 
 .content-title {
@@ -160,6 +185,7 @@ html, body, #compare, .compare-table, .compare-table tbody {
   border-top: 5px solid #fff;  
 }
 .content-subtitle.sub-item-hidden td:first-child:before {
+  border-top: 5px solid #000;  
 }
 .content-title td {
   border: none;
@@ -217,3 +243,31 @@ html, body, #compare, .compare-table, .compare-table tbody {
 /*.car-title {
   border-left: 1px solid #A5A5A5;
 }*/
+.car-title {
+  position: relative;
+}
+
+.remove-car {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+  font-size: 20px;
+  color: #464646;
+}
+.remove-car:hover {
+  color: red;
+}
+
+.drag-handle {
+  width: 210px;
+  height: 25px;
+  margin-left: 10px;
+  background-image: -webkit-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+  background-image: -moz-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+  background-image: -o-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+  background-image: repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
+  -webkit-background-size: 4px 4px;
+  -moz-background-size: 4px 4px;
+  background-size: 4px 4px;
+  text-indent: -9999px;
+}

@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require bootstrap.min
+//= require flat-ui.min
 //= require turbolinks
 //= require underscore-min
 //= require backbone-min

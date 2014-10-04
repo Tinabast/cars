@@ -1,6 +1,7 @@
 (function(window, undefined) {
   var OPTIONS = {
-    DEBUG: true
+    DEBUG: true,
+    COLUMN_WIDTH: 250
   },
     contentStructure = [
     // {
@@ -339,6 +340,7 @@
       // Start Backbone history a necessary step for bookmarkable URL's
       Backbone.history.start();
     }
+    $('.compare-table tbody').width((CACHE.cars.length + 1) * (OPTIONS.COLUMN_WIDTH + 4));
   }
 
   function renderCar(url, callback) {
@@ -366,7 +368,8 @@
             var $oldHeader = $(__xxx[i]);
             var modelName = $oldHeader.find('.model-name').html();
             var modelIcon = $oldHeader.find('img[alt="suv"]')[0].outerHTML;
-            $($rows[i]).append('<th class="car-title"><div class="header-content">' + modelIcon + '<p>' + modelName + '</p>' + '</div>' + '</th>');
+            var car = $oldHeader.attr("id").slice(0, -2);
+            $($rows[i]).append('<th id="' + car + '.1" class="car-title"><div class="dragtable-drag-handle drag-handle" title="drag me">drag me</div><a href="#" class="remove-car fa fa-trash fa-x3" title="remove car" data-car="' + car + '"></a><div class="header-content">' + modelIcon + '<p>' + modelName + '</p>' + '</div>' + '</th>');
 
           } else {
             $($rows[i]).append(__xxx[i]);
@@ -438,16 +441,16 @@
       return false;
     });
 
-    $('#compare').on('click', '.model-bar', function(e){
-      var $td = $(this).parents('td'),
-        car = $td.first().attr('id').slice(0, -2);
+    $('#compare').on('click', '.remove-car', function(e){
+      var car = $(this).data('car');
+      e.preventDefault();
 
       $('[id^="' + car + '"]').remove();
 
       startRouting({
         params: "cars",
         action: "remove",
-        car: car
+        car: '&cars&' + car
       });
 
     });
@@ -505,5 +508,6 @@
     loadMakes();
     startRouting();
     $('.compare-table').dragtable();
+    //$('.select2').select2();
   });
 })(window);

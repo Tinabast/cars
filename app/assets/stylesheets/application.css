@@ -11,8 +11,9 @@
  * file per style scope.
  *
  *= require jquery-ui
+ *= require font-awesome
  *= require bootstrap.min
- *= require bootstrap-theme.min
+ *= require flat-ui.min
  *= require dragtable-default
  *= require cars.css
  *= require_tree .
