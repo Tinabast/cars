@@ -369,7 +369,11 @@
             var modelName = $oldHeader.find('.model-name').html();
             var modelIcon = $oldHeader.find('img[alt="suv"]')[0].outerHTML;
             var car = $oldHeader.attr("id").slice(0, -2);
-            $($rows[i]).append('<th id="' + car + '.1" class="car-title"><div class="dragtable-drag-handle drag-handle" title="drag me">drag me</div><a href="#" class="remove-car fa fa-trash fa-x3" title="remove car" data-car="' + car + '"></a><div class="header-content">' + modelIcon + '<p>' + modelName + '</p>' + '</div>' + '</th>');
+            var $itemHtml = $oldHeader.find('.model-item').first();
+            var state = $itemHtml.find('strong').html();
+            $itemHtml.find('a, br, strong').remove();
+            var year = $itemHtml.html();
+            $($rows[i]).append('<th id="' + car + '.1" class="car-title"><div class="dragtable-drag-handle drag-handle" title="drag me">drag me</div><a href="#" class="remove-car fa fa-trash fa-x3" title="remove car" data-car="' + car + '"></a><div class="header-content">' + modelIcon + '<p class="model-name">' + modelName + '</p><p class="model-year"><strong>' + state + '</strong>' + year + '</p></div>' + '</th>');
 
           } else {
             $($rows[i]).append(__xxx[i]);
@@ -401,6 +405,17 @@
       makes = MakeModelComparePulldowns.thePulldownUsedData;
     }
     $("#make").html(_.template($('#make-select_template').html(), {makes: makes}));
+
+  }
+
+  function removeCar(car) {
+    $('[id^="' + car + '"]').remove();
+
+    startRouting({
+      params: "cars",
+      action: "remove",
+      car: '&cars&' + car
+    });
 
   }
 
@@ -445,14 +460,7 @@
       var car = $(this).data('car');
       e.preventDefault();
 
-      $('[id^="' + car + '"]').remove();
-
-      startRouting({
-        params: "cars",
-        action: "remove",
-        car: '&cars&' + car
-      });
-
+      removeCar(car);
     });
     $('#compare').on('click', '.content-title', function(e){
       var cat = $(this).data("cat");
@@ -490,10 +498,10 @@
       }
     });
     $('#compare').on('click', '#clear-button', function(e){
-      $("#compare").html(_.template($('#content-table_template').html(), {tableRows: contentStructure}));
-      startRouting({
-        action: "removeAll"
+      $(".remove-car").each(function(){
+        removeCar($(this).data('car'));
       });
+      return false;
     });
     $(window).on('scroll', function(){
       var top = $(".compare-table").first().position().top;

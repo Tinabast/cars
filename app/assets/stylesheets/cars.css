@@ -6,6 +6,7 @@ body {
   max-height: 100%;
 }
 
+
 html, body, #compare, .compare-table {
   overflow: hidden;
 }
@@ -16,9 +17,17 @@ html, body, #compare, .compare-table, .compare-table tbody {
   padding: 0;
   display: block;
 }
+body {
+  padding-bottom: 4px;
+}
+
+label {
+  margin-bottom: 0;
+}
 .compare-table {
   overflow-x: auto;
   overflow-y: hidden;
+  padding-bottom: 15px;
 }
 
  .compare-table tbody {
@@ -50,6 +59,12 @@ html, body, #compare, .compare-table, .compare-table tbody {
 
 #make {
   margin-left: 4px;
+}
+.form-row .form-el {
+  margin-left: 15px;
+}
+.form-row .form-el:first-child {
+  margin-left: 0;
 }
 
 #load-cars {
@@ -117,6 +132,12 @@ html, body, #compare, .compare-table, .compare-table tbody {
   font-size: 12px;
   margin-top: 5px;
   margin-left: 5px;
+}
+
+.model-name, .model-year {
+  margin: 0;
+  line-height: 1.5em;
+  padding-left: 4px;
 }
 
 #compare {
@@ -261,7 +282,6 @@ html, body, #compare, .compare-table, .compare-table tbody {
 .drag-handle {
   width: 210px;
   height: 25px;
-  margin-left: 10px;
   background-image: -webkit-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
   background-image: -moz-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
   background-image: -o-repeating-linear-gradient(135deg, rgba(0,0,0,.3), rgba(0,0,0,.3) 1px, transparent 2px, transparent 2px, rgba(0,0,0,.3) 3px);
